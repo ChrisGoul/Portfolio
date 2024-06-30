@@ -4177,6 +4177,8 @@ textarea.form-control-lg {
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
 }
+
+
 .card > hr {
   margin-right: 0;
   margin-left: 0;
@@ -4204,7 +4206,44 @@ textarea.form-control-lg {
   flex: 1 1 auto;
   padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
   color: var(--bs-card-color);
+  --bs-card-body-hover-color: #d4d8dd;
+  
 }
+.project-card-body {
+  flex: 1 1 auto;
+  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+  color: var(--bs-card-color);
+  --bs-card-body-hover-color: #d4d8dd;
+  
+}
+.project-card-body-detail {
+  flex: 1 1 auto;
+  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+  color: var(--bs-card-color);
+  --bs-card-body-hover-color: #d4d8dd;
+
+  display:none
+  
+}
+
+.project-card-body:hover {
+  background-color: var(--bs-card-body-hover-color);
+}
+
+
+#btnControl {
+  display: none;
+}
+
+
+input[type=checkbox]:checked ~ .project-card-body-detail {
+  display: block
+}
+
+#btnControl:checked + label {
+  color: #08b83d;
+}
+
 
 .card-title {
   margin-bottom: var(--bs-card-title-spacer-y);
