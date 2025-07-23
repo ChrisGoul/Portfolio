@@ -4244,7 +4244,12 @@ input[type=checkbox]:checked ~ .project-card-body-detail {
   color: #08b83d;
 }
 
-
+#btnXBeams {
+  display: none;
+}
+#btnMarble {
+  display: none;
+}
 .card-title {
   margin-bottom: var(--bs-card-title-spacer-y);
 }
