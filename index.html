@@ -4,88 +4,33 @@ title: Chris Goul
 ---
 
 <div class="wrap">
-  <section class="hero">
+  <section class="intro">
+    <img src="{{ '/assets/profile.png' | relative_url }}" alt="Chris Goul" width="132" height="132">
     <div>
-      <p class="eyebrow">Mechanical design engineer</p>
-      <h1>I build things that have to survive contact with the real world.</h1>
-      <p class="lede">
-        Enclosure architecture for Tesla Megapack — structures that hold battery
-        modules through seismic loads and deflagration events at 100,000-unit
-        volumes. Off the clock I build presses, weight machines and motorcycles,
-        and lately I train language models on a single consumer GPU.
+      <h1>Chris Goul</h1>
+      <p class="role">Staff Mechanical Design Engineer, 1X Technologies</p>
+      <p>
+        I design mechanical hardware for production. At
+        <a href="https://www.1x.tech/">1X</a> I'm the mechanical lead for the NEO
+        humanoid's hip and spine — three high-torque quasi-direct-drive joints —
+        and I lead architecture for the next-generation robot. Before that I spent
+        five years at Tesla on Megapack enclosure structures and Supercharger
+        hardware.
       </p>
-      <div class="btn-row">
-        <a class="btn" href="{{ '/projects.html' | relative_url }}">See the work</a>
-        <a class="btn ghost" href="{{ '/writing.html' | relative_url }}">Read the writing</a>
-      </div>
-    </div>
-    <figure class="hero-portrait">
-      <img src="{{ '/assets/profile.png' | relative_url }}" alt="Chris Goul" width="600" height="600">
-      <figcaption><span>Chris Goul</span><span>Mountain View, CA</span></figcaption>
-    </figure>
-  </section>
-</div>
-
-<div class="wrap">
-  <dl class="specs">
-    <div><dt>Currently</dt><dd>Tesla · Energy</dd></div>
-    <div><dt>Role</dt><dd>Sr. Mechanical Design</dd></div>
-    <div><dt>Education</dt><dd>MIT · MechE</dd></div>
-    <div><dt>Since</dt><dd>2020</dd></div>
-  </dl>
-</div>
-
-<div class="wrap">
-  <section class="section">
-    <div class="section-head">
-      <h2>Selected work</h2>
-      <a class="more" href="{{ '/projects.html' | relative_url }}">All projects &rarr;</a>
-    </div>
-
-    <div class="project">
-      <div class="project-grid">
-        <div>
-          <p class="project-index">01 — Materials</p>
-          <h3>Synthetic Marble</h3>
-          <p class="tagline">A high-pressure, high-temperature press that produces
-          100% pure synthetic marble with no binders — replicating the geologic
-          conditions that metamorphose limestone, so the result has the
-          translucency that binder-based synthetics can't fake.</p>
-        </div>
-        <figure class="project-media">
-          <img src="{{ '/assets/Marble_Test.jpg' | relative_url }}" alt="Marble press test sample" loading="lazy" width="600" height="400">
-        </figure>
-      </div>
-    </div>
-
-    <div class="project">
-      <div class="project-grid">
-        <div>
-          <p class="project-index">02 — Product</p>
-          <h3>XBeams T-Slot Extrusion</h3>
-          <p class="tagline">A business selling lightweight, rigid plastic
-          extrusions — a cheaper alternative to aluminium framing for robots,
-          enclosures and shelving.</p>
-        </div>
-        <figure class="project-media">
-          <img src="{{ '/assets/2020_cover.PNG' | relative_url }}" alt="XBeams extrusion" loading="lazy" width="600" height="400">
-        </figure>
-      </div>
-    </div>
-
-    <div class="project">
-      <div class="project-grid">
-        <div>
-          <p class="project-index">03 — Machine</p>
-          <h3>Pneumatic Weight Machine</h3>
-          <p class="tagline">Three generations of a compact home gym that uses
-          pneumatic actuators to apply constant, adjustable force to a cable —
-          with a digital force readout.</p>
-        </div>
-        <figure class="project-media">
-          <img src="{{ '/assets/Gym.png' | relative_url }}" alt="Pneumatic weight machine" loading="lazy" width="600" height="400">
-        </figure>
-      </div>
+      <p>
+        Outside work I build things to find out whether the idea holds up: a cubic
+        press that reaches multi-GPa pressures for diamond synthesis, a pneumatic
+        home gym, an electric motorcycle. Lately I've been
+        <a href="{{ '/writing.html' | relative_url }}">training language models
+        from scratch</a> on a single consumer GPU.
+      </p>
+      <p class="meta">
+        <a href="{{ '/projects.html' | relative_url }}">Projects</a> ·
+        <a href="{{ '/writing.html' | relative_url }}">Writing</a> ·
+        <a href="{{ '/resume.html' | relative_url }}">Resume</a> ·
+        <a href="https://github.com/{{ site.author.github }}">GitHub</a> ·
+        <a href="https://www.linkedin.com/in/{{ site.author.linkedin }}">LinkedIn</a>
+      </p>
     </div>
   </section>
 </div>
@@ -93,26 +38,67 @@ title: Chris Goul
 <div class="wrap">
   <section class="section">
     <div class="section-head">
-      <h2>Latest writing</h2>
-      <a class="more" href="{{ '/writing.html' | relative_url }}">All posts &rarr;</a>
+      <h2>Writing</h2>
+      <a class="more" href="{{ '/writing.html' | relative_url }}">All posts</a>
     </div>
     <ul class="post-list">
-      {%- for post in site.posts limit: 2 %}
+      {%- for post in site.posts limit: 3 %}
       <li>
-        <a class="post-link" href="{{ post.url | relative_url }}">
-          <div class="when">{{ post.date | date: "%b %-d, %Y" }}</div>
-          <div>
-            <h3>{{ post.title }}</h3>
-            <p>{{ post.lede | default: post.excerpt | strip_html | truncate: 180 }}</p>
-            {%- if post.tags %}
-            <div class="tags">{% for t in post.tags %}<span class="tag">{{ t }}</span>{% endfor %}</div>
-            {%- endif %}
-          </div>
-        </a>
+        <div class="when">{{ post.date | date: "%B %-d, %Y" }}</div>
+        <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+        <p>{{ post.lede | default: post.excerpt | strip_html | truncate: 190 }}</p>
       </li>
       {%- else %}
-      <li><p class="meta" style="padding:26px 0;">No posts yet.</p></li>
+      <li><p class="meta">No posts yet.</p></li>
       {%- endfor %}
     </ul>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Selected projects</h2>
+      <a class="more" href="{{ '/projects.html' | relative_url }}">All projects</a>
+    </div>
+
+    <div class="project">
+      <div class="project-grid">
+        <div>
+          <h3>HPHT Cubic Press</h3>
+          <p class="tagline">A laboratory cubic press generating multi-GPa pressures
+          for experimental diamond synthesis — pressure vessel, high-temperature
+          thermal system, custom instrumentation and sample assemblies.</p>
+        </div>
+        <figure class="project-media">
+          <img src="{{ '/assets/Marble_Test.jpg' | relative_url }}" alt="Press test sample" loading="lazy">
+        </figure>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-grid">
+        <div>
+          <h3>Pneumatic Weight Machine</h3>
+          <p class="tagline">A portable home gym with constant concentric and
+          eccentric loading up to 150 kg, using pneumatic actuators and closed-loop
+          cable tension control. Three generations.</p>
+        </div>
+        <figure class="project-media">
+          <img src="{{ '/assets/Gym.png' | relative_url }}" alt="Pneumatic weight machine" loading="lazy">
+        </figure>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-grid">
+        <div>
+          <h3>XBeams</h3>
+          <p class="tagline">A small business selling lightweight plastic T-slot
+          extrusion — a cheaper alternative to aluminium framing.</p>
+        </div>
+        <figure class="project-media">
+          <img src="{{ '/assets/2020_cover.PNG' | relative_url }}" alt="XBeams extrusion" loading="lazy">
+        </figure>
+      </div>
+    </div>
   </section>
 </div>

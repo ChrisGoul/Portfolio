@@ -1,8 +1,9 @@
 title: Chris Goul
 tagline: Mechanical design engineer
 description: >-
-  Mechanical design engineer at Tesla working on energy storage. Hardware
-  projects, and notes from training language models on a single consumer GPU.
+  Staff mechanical design engineer at 1X Technologies, working on humanoid robot
+  actuation. Hardware projects, and notes from training language models on a
+  single consumer GPU.
 
 # This site is served from https://chrisgoul.github.io/Portfolio/, which is a
 # GitHub *project* page — so every internal link has to carry the /Portfolio
@@ -15,9 +16,10 @@ author:
   name: Chris Goul
   github: ChrisGoul
   linkedin: christopher-goul
+  email: chgoul3@gmail.com
 
 nav:
-  - { title: Work,    url: /projects.html }
+  - { title: Projects, url: /projects.html }
   - { title: Writing, url: /writing.html }
   - { title: Resume,  url: /resume.html }
   - { title: Contact, url: /contact.html }

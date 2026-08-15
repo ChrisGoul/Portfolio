@@ -1,34 +1,20 @@
 ---
 layout: page
 title: Contact
-eyebrow: Get in touch
-lede: Happy to talk about mechanical design, energy storage, or what a 154M-parameter model can and can't do on a gaming GPU.
+lede: Happy to talk about mechanical design, actuation, or what a 154M-parameter model can and can't do on a gaming GPU.
 ---
 
 <div class="wrap">
-  <section class="section" style="border-top:0; padding-top:36px;">
-    <div class="contact-grid">
-      <a href="https://www.linkedin.com/in/{{ site.author.linkedin }}">
-        <div class="k">LinkedIn</div>
-        <div class="v">/in/{{ site.author.linkedin }}</div>
-      </a>
-      <a href="https://github.com/{{ site.author.github }}">
-        <div class="k">GitHub</div>
-        <div class="v">@{{ site.author.github }}</div>
-      </a>
+  <section class="section">
+    <ul class="contact-list">
       {%- if site.author.email %}
-      <a href="mailto:{{ site.author.email }}">
-        <div class="k">Email</div>
-        <div class="v">{{ site.author.email }}</div>
-      </a>
+      <li><span class="k">Email</span>
+        <span><a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a></span></li>
       {%- endif %}
-    </div>
-
-    {%- unless site.author.email %}
-    <p class="meta" style="margin-top:20px;">
-      To show an email here, add <code>email:</code> under <code>author:</code> in
-      <code>_config.yml</code> — the card appears automatically.
-    </p>
-    {%- endunless %}
+      <li><span class="k">LinkedIn</span>
+        <span><a href="https://www.linkedin.com/in/{{ site.author.linkedin }}">linkedin.com/in/{{ site.author.linkedin }}</a></span></li>
+      <li><span class="k">GitHub</span>
+        <span><a href="https://github.com/{{ site.author.github }}">github.com/{{ site.author.github }}</a></span></li>
+    </ul>
   </section>
 </div>

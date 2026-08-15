@@ -1,105 +1,98 @@
 ---
 layout: page
-title: Work
-eyebrow: Projects
-lede: Hardware, mostly. Presses, machines, vehicles and a small manufacturing business — built to find out whether the idea actually holds up.
+title: Projects
+lede: Hardware, mostly — presses, machines and vehicles built to find out whether the idea holds up.
 ---
 
 <div class="wrap">
-  <section class="section" style="border-top:0; padding-top:36px;">
+  <section class="section">
 
-    <!-- Synthetic Marble -->
     <div class="project">
       <div class="project-grid">
         <div>
-          <p class="project-index">Materials · Press</p>
-          <h3>Synthetic Marble</h3>
-          <p class="tagline">Developed a high-pressure, high-temperature press to
-          produce 100% pure synthetic marble without binders.</p>
+          <p class="kind">Materials · High pressure</p>
+          <h3>HPHT Cubic Press</h3>
+          <p class="tagline">A laboratory cubic press capable of generating multi-GPa
+          pressures for experimental diamond synthesis — pressure vessel design,
+          high-temperature thermal systems, custom instrumentation and experimental
+          sample assemblies.</p>
           <details class="more-detail">
-            <summary>How it works</summary>
+            <summary>Synthetic marble, the earlier version</summary>
             <div class="detail-body">
-              <p>Synthetic marble floors and countertops are everywhere — but there's
-              a noticeable visual difference between the synthetics and the real thing.</p>
-              <p>Marble is a metamorphic rock: a matrix of large-grained crystals that
-              appear somewhat translucent. Synthetic marbles are made from crushed
-              powder, rocks and a plastic or clay binder, which approximates the
-              surface appearance but not the translucency.</p>
-              <p>I built this high-temperature press to replicate the geologic pressures
-              and temperatures involved in limestone metamorphosis, producing synthetic
-              marble that aesthetically matches the real thing.</p>
+              <p>The press started as an attempt at synthetic marble. Marble is a
+              metamorphic rock — a matrix of large-grained crystals that appear
+              translucent. Commercial synthetics are crushed powder and rock held in a
+              plastic or clay binder, which approximates the surface appearance but not
+              the translucency.</p>
+              <p>Replicating the geologic pressures and temperatures that metamorphose
+              limestone produces material that matches the real thing optically. The same
+              pressure-vessel problem, at higher pressures, is what the diamond work
+              needs.</p>
               <div class="detail-media">
                 <figure>
-                  <img src="{{ '/assets/Limestone_Sample.jpg' | relative_url }}" alt="Limestone sample" loading="lazy">
-                  <figcaption>Limestone feedstock sample</figcaption>
+                  <img src="{{ '/assets/Limestone_Sample.jpg' | relative_url }}" alt="Limestone feedstock sample" loading="lazy">
+                  <figcaption>Limestone feedstock</figcaption>
                 </figure>
                 <figure>
                   <img src="{{ '/assets/Marble Jig.jpg' | relative_url }}" alt="Press jig" loading="lazy">
-                  <figcaption>Press jig</figcaption>
+                  <figcaption>Sample assembly jig</figcaption>
                 </figure>
               </div>
             </div>
           </details>
         </div>
         <figure class="project-media">
-          <img src="{{ '/assets/Marble_Test.jpg' | relative_url }}" alt="Marble test sample" loading="lazy" width="600" height="400">
+          <img src="{{ '/assets/Marble_Test.jpg' | relative_url }}" alt="Pressed sample" loading="lazy">
         </figure>
       </div>
     </div>
 
-    <!-- XBeams -->
     <div class="project">
       <div class="project-grid">
         <div>
-          <p class="project-index">Product · Manufacturing</p>
-          <h3>XBeams Plastic T-Slot Extrusion</h3>
-          <p class="tagline">Launched XBeams, a business selling lightweight, rigid
-          plastic extrusions for DIY projects.</p>
+          <p class="kind">Machine learning</p>
+          <h3>Language Model Pretraining</h3>
+          <p class="tagline">Transformer language models implemented and pretrained from
+          scratch in PyTorch — tokeniser development, retrieval-augmented architectures,
+          and experiments with modern attention mechanisms and training strategies, all
+          on a single 8&nbsp;GB consumer GPU.</p>
+          {%- for post in site.posts limit: 1 %}
+          <p style="margin-top:10px;"><a href="{{ post.url | relative_url }}">{{ post.title }} &rarr;</a></p>
+          {%- endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-grid">
+        <div>
+          <p class="kind">Machine · V3</p>
+          <h3>Pneumatic Weight Machine</h3>
+          <p class="tagline">A portable home gym with constant concentric and eccentric
+          loading up to 150 kg, using pneumatic actuators and closed-loop cable tension
+          control, with a digital force readout.</p>
           <details class="more-detail">
-            <summary>More</summary>
+            <summary>See it running, and the earlier versions</summary>
             <div class="detail-body">
-              <p>A cheaper, lighter alternative to aluminium framing for robots,
-              enclosures, shelves and workbenches.</p>
-              <p><a href="https://xbeams.net/">xbeams.net</a></p>
               <div class="detail-media">
                 <figure>
-                  <img src="{{ '/assets/Banner.PNG' | relative_url }}" alt="XBeams product banner" loading="lazy">
-                  <figcaption>Product range</figcaption>
+                  <video controls preload="metadata"><source src="{{ '/assets/YC_LIFTS.mp4' | relative_url }}" type="video/mp4"></video>
+                  <figcaption>V3 in use</figcaption>
+                </figure>
+                <figure>
+                  <video controls preload="metadata"><source src="{{ '/assets/SET_WEIGHT.mp4' | relative_url }}" type="video/mp4"></video>
+                  <figcaption>Setting force, with digital readout</figcaption>
                 </figure>
               </div>
-            </div>
-          </details>
-        </div>
-        <figure class="project-media">
-          <img src="{{ '/assets/2020_cover.PNG' | relative_url }}" alt="XBeams extrusion" loading="lazy" width="400" height="370">
-        </figure>
-      </div>
-    </div>
-
-    <!-- Weight machine V3 -->
-    <div class="project">
-      <div class="project-grid">
-        <div>
-          <p class="project-index">Machine · V3</p>
-          <h3>Pneumatic Weight Machine V3</h3>
-          <p class="tagline">A compact, portable home gym that uses pneumatic
-          actuators to tension cables and apply an adjustable, constant force to
-          the user.</p>
-          <details class="more-detail">
-            <summary>See it running</summary>
-            <div class="detail-body">
               <div class="detail-media">
                 <figure>
-                  <video controls preload="metadata" width="600" height="400">
-                    <source src="{{ '/assets/YC_LIFTS.mp4' | relative_url }}" type="video/mp4">
-                  </video>
-                  <figcaption>The machine in use</figcaption>
+                  <img src="{{ '/assets/V2_Machine.png' | relative_url }}" alt="Weight machine V2" loading="lazy">
+                  <figcaption>V2 — a sprocket with changing radius compensates for
+                  pressure rising as the piston travels</figcaption>
                 </figure>
                 <figure>
-                  <video controls preload="metadata" width="600" height="400">
-                    <source src="{{ '/assets/SET_WEIGHT.mp4' | relative_url }}" type="video/mp4">
-                  </video>
-                  <figcaption>Adjustable force, with a 7-segment digital readout</figcaption>
+                  <img src="{{ '/assets/V1.png' | relative_url }}" alt="Weight machine V1" loading="lazy">
+                  <figcaption>V1 — a large air tank offsets the pressure rise</figcaption>
                 </figure>
               </div>
             </div>
@@ -111,45 +104,27 @@ lede: Hardware, mostly. Presses, machines, vehicles and a small manufacturing bu
       </div>
     </div>
 
-    <!-- V2 -->
     <div class="project">
       <div class="project-grid">
         <div>
-          <p class="project-index">Machine · V2</p>
-          <h3>Pneumatic Weight Machine V2</h3>
-          <p class="tagline">Proof of concept, less polished than V3. Uses a sprocket
-          with a changing radius to compensate for pressure increasing as the piston
-          travels.</p>
+          <p class="kind">Product · Manufacturing</p>
+          <h3>XBeams T-Slot Extrusion</h3>
+          <p class="tagline">A business selling lightweight, rigid plastic extrusions —
+          a cheaper alternative to aluminium framing for robots, enclosures and shelving.
+          <a href="https://xbeams.net/">xbeams.net</a></p>
         </div>
         <figure class="project-media">
-          <img src="{{ '/assets/V2_Machine.png' | relative_url }}" alt="Weight machine V2" loading="lazy">
+          <img src="{{ '/assets/2020_cover.PNG' | relative_url }}" alt="XBeams extrusion" loading="lazy">
         </figure>
       </div>
     </div>
 
-    <!-- V1 -->
     <div class="project">
       <div class="project-grid">
         <div>
-          <p class="project-index">Machine · V1</p>
-          <h3>Pneumatic Weight Machine V1</h3>
-          <p class="tagline">The initial design. Relies on a large air tank to offset
-          the pressure increase as the pistons travel.</p>
-        </div>
-        <figure class="project-media">
-          <img src="{{ '/assets/V1.png' | relative_url }}" alt="Weight machine V1" loading="lazy">
-        </figure>
-      </div>
-    </div>
-
-    <!-- Seaweed harvester -->
-    <div class="project">
-      <div class="project-grid">
-        <div>
-          <p class="project-index">Vehicle · Marine</p>
+          <p class="kind">Vehicle · Marine</p>
           <h3>Automated Seaweed Harvester</h3>
-          <p class="tagline">A remotely-operated vehicle for harvesting farmed
-          seaweeds.</p>
+          <p class="tagline">A remotely-operated vehicle for harvesting farmed seaweeds.</p>
         </div>
         <figure class="project-media">
           <img src="{{ '/assets/boat.png' | relative_url }}" alt="Seaweed harvesting vehicle" loading="lazy">
@@ -157,15 +132,14 @@ lede: Hardware, mostly. Presses, machines, vehicles and a small manufacturing bu
       </div>
     </div>
 
-    <!-- Solar drone -->
     <div class="project">
       <div class="project-grid">
         <div>
-          <p class="project-index">Vehicle · Aerial</p>
+          <p class="kind">Vehicle · Aerial</p>
           <h3>Solar Drone</h3>
-          <p class="tagline">A drone capable of landing and recharging via solar panel,
-          enabling long-range data gathering missions. Built with MIT's Photovoltaics
-          Lab and Conservation International to monitor deforestation in the Andes.</p>
+          <p class="tagline">A drone that lands and recharges via solar panel, enabling
+          long-range data gathering. Built with MIT's Photovoltaics Lab and Conservation
+          International to monitor deforestation in the Andes.</p>
         </div>
         <figure class="project-media">
           <img src="{{ '/assets/drone.png' | relative_url }}" alt="Solar drone" loading="lazy">
@@ -173,14 +147,13 @@ lede: Hardware, mostly. Presses, machines, vehicles and a small manufacturing bu
       </div>
     </div>
 
-    <!-- Motorcycle -->
     <div class="project">
       <div class="project-grid">
         <div>
-          <p class="project-index">Vehicle · Ground</p>
+          <p class="kind">Vehicle · Ground</p>
           <h3>Electric Motorcycle</h3>
-          <p class="tagline">Designed, simulated, welded and built an electric
-          motorcycle. Learned the importance of wire harnesses.</p>
+          <p class="tagline">Designed, simulated, welded and built an electric motorcycle.
+          Learned the importance of wire harnesses.</p>
         </div>
         <figure class="project-media">
           <img src="{{ '/assets/motorcycle.png' | relative_url }}" alt="Electric motorcycle" loading="lazy">
@@ -188,14 +161,13 @@ lede: Hardware, mostly. Presses, machines, vehicles and a small manufacturing bu
       </div>
     </div>
 
-    <!-- Forge -->
     <div class="project">
       <div class="project-grid">
         <div>
-          <p class="project-index">Machine · Controls</p>
+          <p class="kind">Machine · Controls</p>
           <h3>Temperature Controlled Forge</h3>
-          <p class="tagline">A propane forge capable of holding a constant temperature
-          via PID control, built for the MIT Blacksmithing Lab.</p>
+          <p class="tagline">A propane forge holding constant temperature under PID
+          control, built for the MIT Blacksmithing Lab.</p>
         </div>
         <figure class="project-media">
           <img src="{{ '/assets/forge.png' | relative_url }}" alt="Temperature controlled forge" loading="lazy">

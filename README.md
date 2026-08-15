@@ -68,8 +68,9 @@ assets/            images, video, resume PDF
 *.html             the four static pages
 ```
 
-Colours, type and spacing are CSS custom properties at the top of `main.css`,
-and the site has a full dark theme that follows the reader's system setting.
+Colours, type and spacing are CSS custom properties at the top of `main.css`.
+The site is light-only by design — there is no dark theme, so a reader with a
+dark OS still gets the white page.
 
 ## Note on images
 
