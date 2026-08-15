@@ -110,16 +110,14 @@ code { font-family: var(--mono); font-size: 0.85em; background: var(--sunk); pad
   .career .when { padding-top: 0; }
 }
 
-/* --- project index (home) ------------------------------------------------- */
+/* --- project links (home) ------------------------------------------------- */
 
-.proj-index { list-style: none; padding: 0; margin: 0; }
-.proj-index > li { padding: 16px 0; border-bottom: 1px solid var(--rule); }
-.proj-index > li:last-child { border-bottom: 0; }
-.proj-index .row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.proj-index h3 { margin: 0; }
-.proj-index .kind { font-size: 13px; color: var(--ink-soft); }
-.proj-index p { color: var(--ink-mid); margin: 5px 0 0; max-width: var(--measure); font-size: 15.5px; }
-.proj-index .go { font-size: 14px; margin-top: 6px; display: inline-block; }
+.proj-links { list-style: none; padding: 0; margin: 0; }
+.proj-links > li { padding: 11px 0; border-bottom: 1px solid var(--rule); display: flex; align-items: baseline; gap: 8px 14px; flex-wrap: wrap; }
+.proj-links > li:last-child { border-bottom: 0; }
+.proj-links a { font-size: 1.02rem; }
+.proj-links .tags { font-size: 13px; color: var(--ink-soft); margin-left: auto; }
+@media (max-width: 560px) { .proj-links .tags { margin-left: 0; width: 100%; } }
 
 /* --- page header ---------------------------------------------------------- */
 
@@ -164,17 +162,6 @@ details.more-detail .detail-body p { max-width: var(--measure); }
 .detail-media figure { margin: 0; }
 .detail-media img, .detail-media video { border: 1px solid var(--rule); border-radius: 3px; width: 100%; }
 .detail-media figcaption { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
-
-/* --- writing list --------------------------------------------------------- */
-
-.post-list { list-style: none; padding: 0; margin: 0; }
-.post-list > li { padding: 18px 0; border-bottom: 1px solid var(--rule); }
-.post-list > li:last-child { border-bottom: 0; }
-.post-list h3 { margin-bottom: 5px; }
-.post-list h3 a { color: var(--ink); text-decoration: none; }
-.post-list h3 a:hover { color: var(--accent); text-decoration: underline; }
-.post-list .when { font-size: 14px; color: var(--ink-soft); margin-bottom: 5px; }
-.post-list p { color: var(--ink-mid); margin: 0; max-width: var(--measure); font-size: 15.5px; }
 
 /* --- article -------------------------------------------------------------- */
 

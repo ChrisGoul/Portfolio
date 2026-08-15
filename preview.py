@@ -33,7 +33,7 @@ except ImportError:
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "_site_preview")
 COPY_DIRS = ["assets", "css", "js"]
-PAGES = ["index.html", "projects.html", "writing.html"]
+PAGES = ["index.html"]
 
 
 # --- front matter -----------------------------------------------------------
@@ -271,6 +271,13 @@ def apply_filters(val, filters, site):
             val = re.sub(r"<[^>]+>", "", str(val or ""))
         elif name == "strip_newlines":
             val = " ".join(str(val or "").split())
+        elif name == "sort":
+            if isinstance(val, list):
+                key = arg or None
+                val = sorted(val, key=(lambda d: d.get(key, 999)) if key else (lambda x: x))
+        elif name == "join":
+            if isinstance(val, (list, tuple)):
+                val = arg.join(str(x) for x in val)
     return val
 
 
@@ -371,25 +378,21 @@ def build(strict=True):
     site = yaml.safe_load(open(os.path.join(ROOT, "_config.yml"), encoding="utf-8"))
     site["time"] = datetime.now()
 
-    posts = []
-    pdir = os.path.join(ROOT, "_posts")
+    # _projects is a Jekyll collection, ordered by the `order:` front matter
+    # field rather than by date.
+    projects = []
+    pdir = os.path.join(ROOT, "_projects")
     if os.path.isdir(pdir):
         for fn in sorted(os.listdir(pdir)):
             if not fn.endswith((".md", ".markdown")):
                 continue
             fm, body = split_front_matter(open(os.path.join(pdir, fn), encoding="utf-8").read())
-            slug = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", fn).rsplit(".", 1)[0]
-            fm.update(url=f"/writing/{slug}/", slug=slug, _body=body,
-                      layout=fm.get("layout", "post"))
-            d = fm.get("date")
-            if isinstance(d, str):
-                fm["date"] = datetime.fromisoformat(d)
-            elif d is not None and not isinstance(d, datetime):
-                fm["date"] = datetime(d.year, d.month, d.day)
-            fm.setdefault("date", datetime.now())
-            posts.append(fm)
-    posts.sort(key=lambda p: p["date"], reverse=True)
-    site["posts"] = posts
+            slug = fn.rsplit(".", 1)[0]
+            fm.update(url=f"/projects/{slug}/", slug=slug, _body=body,
+                      layout=fm.get("layout", "project"))
+            projects.append(fm)
+    projects.sort(key=lambda p: p.get("order", 999))
+    site["projects"] = projects
 
     if os.path.isdir(OUT):
         shutil.rmtree(OUT)
@@ -417,10 +420,10 @@ def build(strict=True):
         open(path, "w", encoding="utf-8").write(out)
         written.append(path)
 
-    for post in posts:
+    for post in projects:
         content = render(markdown(post["_body"]), Ctx(site=site, page=post))
-        out = apply_layout(post.get("layout", "post"), content, post, site)
-        d = os.path.join(root_out, "writing", post["slug"])
+        out = apply_layout(post.get("layout", "project"), content, post, site)
+        d = os.path.join(root_out, "projects", post["slug"])
         os.makedirs(d, exist_ok=True)
         path = os.path.join(d, "index.html")
         open(path, "w", encoding="utf-8").write(out)

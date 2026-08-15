@@ -5,37 +5,34 @@ Personal site — [chrisgoul.github.io/Portfolio](https://chrisgoul.github.io/Po
 Static site built with Jekyll, which GitHub Pages compiles automatically on push
 to `main`. No build step to run locally, no framework, no CDN dependencies.
 
-## Writing a new post
+## Adding a project
 
-Drop a Markdown file in `_posts/` named `YYYY-MM-DD-slug.md`:
+Every project is one document in `_projects/`. The home page is just a list of
+links to them. Create `_projects/my-project.md`:
 
 ```markdown
 ---
-title: "The title"
-eyebrow: Machine learning
+title: My Project
+order: 9              # position in the home-page list, low numbers first
 lede: >-
-  One or two sentences. Shows under the title, and as the summary on the
-  writing index and home page.
+  One or two sentences, shown under the title.
 description: Used for the meta description and link previews.
-date: 2026-08-15
-tags: [llm, evaluation]
-reading_time: 8 min read
+meta: ["Tag", "Another tag"]   # the small grey text on the home page
 ---
 
 Body goes here. Markdown, with raw HTML where you need it.
 ```
 
-That's the whole workflow — the writing index, the home page list and the RSS
-feed all pick it up automatically. The URL becomes `/writing/slug/`.
+The URL becomes `/projects/my-project/`. Nothing else needs editing.
 
-Useful classes when a post needs more than prose (all defined in `css/main.css`):
+Useful classes when a project needs more than prose (all in `css/main.css`):
 
 | Class | Use |
 |---|---|
 | `.tbl` wrapping a `<table>` | Data table that scrolls sideways on mobile instead of breaking the page |
-| `.chartbox` wrapping an `<svg>` | Inline chart. Use the `.c-grid` / `.c-axis` / `.c-tick` / `.c-lab` classes so it themes correctly |
-| `.samples` with `.s` rows | Model output or chat transcripts |
-| `.full` on a figure | Lets a figure break out past the text measure |
+| `.chartbox` wrapping an `<svg>` | Inline chart; use `.c-grid` / `.c-axis` / `.c-tick` / `.c-lab` so it themes correctly |
+| `.samples` with `.s` rows | Model output or transcripts |
+| `.full` on a figure | Lets a figure break past the text measure |
 | `.n` / `.good` / `.bad` / `.dim` on a `<td>` | Numeric and emphasis styling in tables |
 
 ## Previewing locally
@@ -61,11 +58,11 @@ preview is almost always genuinely broken.
 ```
 _config.yml        site settings, nav, author links
 _includes/         head, nav, footer
-_layouts/          default -> page / post
-_posts/            blog posts (Markdown)
+_layouts/          default -> page / project
+_projects/         one Markdown file per project
 css/main.css       the whole design system
 assets/            images, video, resume PDF
-*.html             index (home), projects, writing
+index.html         the only page: bio, career, project links
 ```
 
 Colours, type and spacing are CSS custom properties at the top of `main.css`.
