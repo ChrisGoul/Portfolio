@@ -12,29 +12,84 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
         <div>
           <p class="kind">Materials · High pressure</p>
           <h3>HPHT Cubic Press</h3>
-          <p class="tagline">A laboratory cubic press capable of generating multi-GPa
-          pressures for experimental diamond synthesis — pressure vessel design,
-          high-temperature thermal systems, custom instrumentation and experimental
-          sample assemblies.</p>
+          <p class="tagline">A laboratory press built to reach the multi-GPa,
+          high-temperature conditions where diamond is the stable phase of carbon —
+          pressure vessel, high-temperature thermal system, custom instrumentation and
+          the sample assemblies that go inside it.</p>
+          <p class="tagline" style="margin-top:10px;">The compression stage is a
+          conventional Kawai-type multi-anvil arrangement: eight tungsten carbide cubes,
+          corners truncated, closing on an octahedral pressure medium with pyrophyllite
+          gaskets that extrude and seal as the assembly compresses. That geometry is
+          decades old and well documented — nothing novel about it. The press driving
+          it and the cell design are my own and stay undocumented here.</p>
+
           <details class="more-detail">
-            <summary>Synthetic marble, the earlier version</summary>
+            <summary>Anvils, loaded and recovered</summary>
             <div class="detail-body">
-              <p>The press started as an attempt at synthetic marble. Marble is a
-              metamorphic rock — a matrix of large-grained crystals that appear
+              <div class="detail-media">
+                <figure>
+                  <img src="{{ '/assets/hpht_anvils_loaded.jpg' | relative_url }}" alt="Second-stage anvil cluster assembled around the octahedral cell, thermocouple leads exiting between gaskets" loading="lazy">
+                  <figcaption>Second-stage cluster closed around the cell before a run.
+                  Thermocouple and heater leads exit along the gasket seams — routing them
+                  so they survive compression is most of the difficulty.</figcaption>
+                </figure>
+                <figure>
+                  <img src="{{ '/assets/hpht_anvils_recovered.jpg' | relative_url }}" alt="The same anvil cluster after a run, gaskets extruded and pressure medium residue on the anvil faces" loading="lazy">
+                  <figcaption>After a run. The gaskets have extruded into the anvil gaps
+                  and the pressure medium has partly blown out — how the residue is
+                  distributed tells you whether the cell held pressure or failed early.</figcaption>
+                </figure>
+              </div>
+            </div>
+          </details>
+
+          <details class="more-detail">
+            <summary>Recovered material</summary>
+            <div class="detail-body">
+              <p>Products are broken out of the recovered cell, cleaned up and picked
+              through under a stereo microscope. Identification is by eye at this stage —
+              habit, lustre and hardness — so the crystals below are promising rather
+              than confirmed until they go through proper analysis.</p>
+              <div class="detail-media">
+                <figure>
+                  <img src="{{ '/assets/hpht_crystals.jpg' | relative_url }}" alt="Darkfield microscope view showing several small transparent crystals among dark opaque fragments" loading="lazy">
+                  <figcaption>Transparent, sharply faceted crystals recovered alongside
+                  dark opaque fragments. A few hundred microns across.</figcaption>
+                </figure>
+                <figure>
+                  <img src="{{ '/assets/hpht_recovered.jpg' | relative_url }}" alt="Brightfield microscope view of recovered cell material with dark particles dispersed through a pale matrix" loading="lazy">
+                  <figcaption>The same run in brightfield — dark carbon dispersed through
+                  the pale pressure medium.</figcaption>
+                </figure>
+                <figure>
+                  <img src="{{ '/assets/hpht_graphite.jpg' | relative_url }}" alt="Microscope view of a bronze, highly reflective flaky material filling the field" loading="lazy">
+                  <figcaption>A different run: bronze, strongly reflective and flaky,
+                  which looks like pyrolytic graphite. Carbon that got hot enough to
+                  reorganise but never crossed into the diamond field.</figcaption>
+                </figure>
+              </div>
+            </div>
+          </details>
+
+          <details class="more-detail">
+            <summary>Where it started: synthetic marble</summary>
+            <div class="detail-body">
+              <p>The press began as an attempt at synthetic marble. Marble is a
+              metamorphic rock — a matrix of large-grained crystals that reads as
               translucent. Commercial synthetics are crushed powder and rock held in a
               plastic or clay binder, which approximates the surface appearance but not
               the translucency.</p>
-              <p>Replicating the geologic pressures and temperatures that metamorphose
-              limestone produces material that matches the real thing optically. The same
-              pressure-vessel problem, at higher pressures, is what the diamond work
-              needs.</p>
+              <p>Reproducing the geologic pressures and temperatures that metamorphose
+              limestone gets you material that matches optically. It is the same
+              pressure-vessel problem as the diamond work, an order of magnitude lower
+              in pressure — which made it a good place to learn on.</p>
               <div class="detail-media">
                 <figure>
                   <img src="{{ '/assets/Limestone_Sample.jpg' | relative_url }}" alt="Limestone feedstock sample" loading="lazy">
                   <figcaption>Limestone feedstock</figcaption>
                 </figure>
                 <figure>
-                  <img src="{{ '/assets/Marble Jig.jpg' | relative_url }}" alt="Press jig" loading="lazy">
+                  <img src="{{ '/assets/Marble Jig.jpg' | relative_url }}" alt="Sample assembly jig" loading="lazy">
                   <figcaption>Sample assembly jig</figcaption>
                 </figure>
               </div>
@@ -42,7 +97,7 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
           </details>
         </div>
         <figure class="project-media">
-          <img src="{{ '/assets/Marble_Test.jpg' | relative_url }}" alt="Pressed sample" loading="lazy">
+          <img src="{{ '/assets/hpht_crystals.jpg' | relative_url }}" alt="Transparent crystals recovered from an HPHT run, seen under a microscope" loading="lazy">
         </figure>
       </div>
     </div>
