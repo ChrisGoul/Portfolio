@@ -1,0 +1,33 @@
+---
+layout: page
+title: Writing
+eyebrow: Notes
+lede: Mostly about training language models on a single consumer GPU — what worked, what didn't, and what I had to measure twice.
+---
+
+<div class="wrap">
+  <section class="section" style="border-top:0; padding-top:30px;">
+    <ul class="post-list">
+      {%- for post in site.posts %}
+      <li>
+        <a class="post-link" href="{{ post.url | relative_url }}">
+          <div class="when">{{ post.date | date: "%b %-d, %Y" }}</div>
+          <div>
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.lede | default: post.excerpt | strip_html | truncate: 220 }}</p>
+            {%- if post.tags %}
+            <div class="tags">{% for t in post.tags %}<span class="tag">{{ t }}</span>{% endfor %}</div>
+            {%- endif %}
+          </div>
+        </a>
+      </li>
+      {%- else %}
+      <li><p class="meta" style="padding:26px 0;">Nothing published yet.</p></li>
+      {%- endfor %}
+    </ul>
+
+    <p class="meta" style="margin-top:30px;">
+      Subscribe via <a href="{{ '/feed.xml' | relative_url }}">RSS</a>.
+    </p>
+  </section>
+</div>

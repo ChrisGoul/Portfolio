@@ -1,0 +1,46 @@
+title: Chris Goul
+tagline: Mechanical design engineer
+description: >-
+  Mechanical design engineer at Tesla working on energy storage. Hardware
+  projects, and notes from training language models on a single consumer GPU.
+
+# This site is served from https://chrisgoul.github.io/Portfolio/, which is a
+# GitHub *project* page — so every internal link has to carry the /Portfolio
+# prefix. Never hardcode a leading "/" in a URL; use the relative_url filter:
+#   <a href="{{ '/writing/' | relative_url }}">
+url: "https://chrisgoul.github.io"
+baseurl: "/Portfolio"
+
+author:
+  name: Chris Goul
+  github: ChrisGoul
+  linkedin: christopher-goul
+
+nav:
+  - { title: Work,    url: /projects.html }
+  - { title: Writing, url: /writing.html }
+  - { title: Resume,  url: /resume.html }
+  - { title: Contact, url: /contact.html }
+
+permalink: /writing/:title/
+
+
+defaults:
+  - scope: { path: "", type: posts }
+    values:
+      layout: post
+
+sass:
+  style: compressed
+
+exclude:
+  - README.md
+  - preview.py
+  - _site_preview
+  - .gitattributes
+
+plugins:
+  - jekyll-feed
+
+feed:
+  path: feed.xml
