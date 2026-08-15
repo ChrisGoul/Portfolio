@@ -21,8 +21,6 @@ author:
 nav:
   - { title: Projects, url: /projects.html }
   - { title: Writing, url: /writing.html }
-  - { title: Resume,  url: /resume.html }
-  - { title: Contact, url: /contact.html }
 
 permalink: /writing/:title/
 

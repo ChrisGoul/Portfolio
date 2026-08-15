@@ -63,9 +63,9 @@ _config.yml        site settings, nav, author links
 _includes/         head, nav, footer
 _layouts/          default -> page / post
 _posts/            blog posts (Markdown)
-css/main.css       the whole design system, ~600 lines
+css/main.css       the whole design system
 assets/            images, video, resume PDF
-*.html             the four static pages
+*.html             index (home), projects, writing
 ```
 
 Colours, type and spacing are CSS custom properties at the top of `main.css`.

@@ -81,18 +81,45 @@ code { font-family: var(--mono); font-size: 0.85em; background: var(--sunk); pad
   .site-nav { margin-left: 0; width: 100%; gap: 14px; margin-top: 6px; flex-wrap: wrap; }
 }
 
-/* --- home ----------------------------------------------------------------- */
+/* --- home masthead -------------------------------------------------------- */
 
-.intro { display: grid; grid-template-columns: 132px 1fr; gap: 26px; align-items: start; padding: 40px 0 10px; }
-.intro img { width: 132px; height: 132px; object-fit: cover; border-radius: 3px; }
-.intro h1 { margin-bottom: 4px; }
-.intro .role { color: var(--ink-soft); font-size: 15px; margin-bottom: 14px; }
-.intro p { margin-bottom: 0.9em; }
-.intro p:last-child { margin-bottom: 0; }
-@media (max-width: 560px) {
-  .intro { grid-template-columns: 1fr; gap: 18px; }
-  .intro img { width: 108px; height: 108px; }
+.masthead { text-align: center; padding: 40px 0 12px; }
+.avatar {
+  width: 148px; height: 148px; border-radius: 50%;
+  object-fit: cover; margin: 0 auto 20px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
 }
+.masthead h1 { margin-bottom: 6px; }
+.masthead .role { color: var(--ink-soft); font-size: 15.5px; margin-bottom: 16px; }
+.masthead .blurb { max-width: 36rem; margin: 0 auto 14px; color: var(--ink-mid); }
+.masthead .links { font-size: 14.5px; margin: 0; }
+@media (max-width: 560px) { .avatar { width: 124px; height: 124px; } }
+
+/* --- career timeline ------------------------------------------------------ */
+
+.career { list-style: none; padding: 0; margin: 0; }
+.career > li { display: grid; grid-template-columns: 108px 1fr; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.career > li:last-child { border-bottom: 0; }
+.career .when { font-size: 14px; color: var(--ink-soft); font-variant-numeric: tabular-nums; padding-top: 2px; white-space: nowrap; }
+.career .org { font-weight: 600; }
+.career .level { color: var(--ink-soft); font-size: 14.5px; }
+.career .note { color: var(--ink-mid); font-size: 15px; margin: 4px 0 0; max-width: var(--measure); }
+@media (max-width: 560px) {
+  .career > li { grid-template-columns: 1fr; gap: 2px; }
+  .career .when { padding-top: 0; }
+}
+
+/* --- project index (home) ------------------------------------------------- */
+
+.proj-index { list-style: none; padding: 0; margin: 0; }
+.proj-index > li { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.proj-index > li:last-child { border-bottom: 0; }
+.proj-index .row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.proj-index h3 { margin: 0; }
+.proj-index .kind { font-size: 13px; color: var(--ink-soft); }
+.proj-index p { color: var(--ink-mid); margin: 5px 0 0; max-width: var(--measure); font-size: 15.5px; }
+.proj-index .go { font-size: 14px; margin-top: 6px; display: inline-block; }
 
 /* --- page header ---------------------------------------------------------- */
 
@@ -108,21 +135,9 @@ code { font-family: var(--mono); font-size: 0.85em; background: var(--sunk); pad
 .section-head h2 { margin: 0; }
 .section-head .more { font-size: 14px; }
 
-/* --- entries (work / resume) ---------------------------------------------- */
-
-.entry { padding: 20px 0; border-bottom: 1px solid var(--rule); }
-.entry:last-child { border-bottom: 0; }
-.entry-top { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 3px; }
-.entry h3 { margin: 0; }
-.entry .when { font-size: 14px; color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.entry .where { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 10px; }
-.entry ul { margin: 0; padding-left: 19px; color: var(--ink-mid); }
-.entry li { margin-bottom: 6px; max-width: var(--measure); }
-.entry p { color: var(--ink-mid); max-width: var(--measure); }
-
 /* --- projects ------------------------------------------------------------- */
 
-.project { padding: 26px 0; border-bottom: 1px solid var(--rule); }
+.project { padding: 26px 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 20px; }
 .project:last-child { border-bottom: 0; }
 .project-grid { display: grid; grid-template-columns: 1fr 250px; gap: 28px; align-items: start; }
 .project h3 { margin-bottom: 6px; }
@@ -149,14 +164,6 @@ details.more-detail .detail-body p { max-width: var(--measure); }
 .detail-media figure { margin: 0; }
 .detail-media img, .detail-media video { border: 1px solid var(--rule); border-radius: 3px; width: 100%; }
 .detail-media figcaption { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
-
-/* --- skills --------------------------------------------------------------- */
-
-.skillrow { display: grid; grid-template-columns: 116px 1fr; gap: 18px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
-.skillrow:last-child { border-bottom: 0; }
-.skillrow dt { font-size: 14px; color: var(--ink-soft); }
-.skillrow dd { margin: 0; color: var(--ink-mid); font-size: 15.5px; }
-@media (max-width: 560px) { .skillrow { grid-template-columns: 1fr; gap: 4px; } }
 
 /* --- writing list --------------------------------------------------------- */
 
@@ -232,13 +239,6 @@ details.more-detail .detail-body p { max-width: var(--measure); }
 .samples .s .v { font-family: var(--serif); font-size: 15px; line-height: 1.55; color: var(--ink-mid); }
 .samples .s .v b { color: var(--ink); font-weight: 400; }
 .samples .s.user .v { font-family: var(--sans); font-size: 14.5px; color: var(--ink); font-weight: 600; }
-
-/* --- contact -------------------------------------------------------------- */
-
-.contact-list { list-style: none; padding: 0; margin: 0; }
-.contact-list li { padding: 11px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 96px 1fr; gap: 14px; }
-.contact-list li:last-child { border-bottom: 0; }
-.contact-list .k { color: var(--ink-soft); font-size: 14.5px; }
 
 /* --- footer --------------------------------------------------------------- */
 

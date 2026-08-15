@@ -7,7 +7,7 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
 <div class="wrap">
   <section class="section">
 
-    <div class="project">
+    <div class="project" id="hpht-press">
       <div class="project-grid">
         <div>
           <p class="kind">Materials · High pressure</p>
@@ -102,23 +102,52 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
       </div>
     </div>
 
-    <div class="project">
+    <div class="project" id="llm">
       <div class="project-grid">
         <div>
           <p class="kind">Machine learning</p>
           <h3>Language Model Pretraining</h3>
           <p class="tagline">Transformer language models implemented and pretrained from
-          scratch in PyTorch — tokeniser development, retrieval-augmented architectures,
-          and experiments with modern attention mechanisms and training strategies, all
-          on a single 8&nbsp;GB consumer GPU.</p>
+          scratch in PyTorch on a single 8&nbsp;GB consumer GPU — tokeniser development,
+          retrieval-augmented architectures, and experiments with modern attention
+          mechanisms and training strategies.</p>
+          <p class="tagline" style="margin-top:10px;">The largest run is a 154M-parameter
+          model trained for 46 hours on 0.81B tokens. Measured against GPT-2-small under
+          one shared evaluation harness it lands 1.7 points behind on HellaSwag and ties
+          on ARC-Easy, using about a tenth of the training compute.</p>
+
+          <details class="more-detail">
+            <summary>What's in it</summary>
+            <div class="detail-body">
+              <p>Written from scratch rather than assembled from a library, which is the
+              point — the architecture is the modern shortlist implemented by hand: Muon
+              on the 2D hidden matrices with Adam on embeddings and head, rotary position
+              embeddings, QK-norm, ReLU² MLPs, zero-initialised residual projections,
+              parameter-free RMSNorm, logit soft-capping and a trapezoidal learning-rate
+              schedule. Gradient checkpointing is what makes a 154M model fit in 8 GB at
+              all — activations were the memory wall, and recomputing them cut usage from
+              7.9 GB to 2.8 GB.</p>
+              <p>Around the model sits the less glamorous half: dataset builders, an
+              ablation runner, throughput and memory probes, a supervised fine-tuning
+              path with loss masked to assistant turns, a live dashboard, and a shared
+              evaluation harness with bootstrap confidence intervals and paired
+              significance tests.</p>
+              <p>The evaluation work turned out to matter more than the training. Three
+              ordinary measurement mistakes — a 100-item benchmark, taking the first
+              <em>n</em> rows of a validation set, and two scoring functions that
+              disagreed on tokenisation — had combined to make a losing model look like a
+              winning one.</p>
+            </div>
+          </details>
+
           {%- for post in site.posts limit: 1 %}
-          <p style="margin-top:10px;"><a href="{{ post.url | relative_url }}">{{ post.title }} &rarr;</a></p>
+          <p style="margin-top:12px;"><a href="{{ post.url | relative_url }}">{{ post.title }} &rarr;</a></p>
           {%- endfor %}
         </div>
       </div>
     </div>
 
-    <div class="project">
+    <div class="project" id="weight-machine">
       <div class="project-grid">
         <div>
           <p class="kind">Machine · V3</p>
@@ -159,7 +188,7 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
       </div>
     </div>
 
-    <div class="project">
+    <div class="project" id="xbeams">
       <div class="project-grid">
         <div>
           <p class="kind">Product · Manufacturing</p>
@@ -174,7 +203,7 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
       </div>
     </div>
 
-    <div class="project">
+    <div class="project" id="seaweed">
       <div class="project-grid">
         <div>
           <p class="kind">Vehicle · Marine</p>
@@ -187,7 +216,7 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
       </div>
     </div>
 
-    <div class="project">
+    <div class="project" id="solar-drone">
       <div class="project-grid">
         <div>
           <p class="kind">Vehicle · Aerial</p>
@@ -202,7 +231,7 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
       </div>
     </div>
 
-    <div class="project">
+    <div class="project" id="motorcycle">
       <div class="project-grid">
         <div>
           <p class="kind">Vehicle · Ground</p>
@@ -216,7 +245,7 @@ lede: Hardware, mostly — presses, machines and vehicles built to find out whet
       </div>
     </div>
 
-    <div class="project">
+    <div class="project" id="forge">
       <div class="project-grid">
         <div>
           <p class="kind">Machine · Controls</p>

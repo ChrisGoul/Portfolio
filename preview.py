@@ -33,7 +33,7 @@ except ImportError:
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "_site_preview")
 COPY_DIRS = ["assets", "css", "js"]
-PAGES = ["index.html", "projects.html", "resume.html", "writing.html", "contact.html"]
+PAGES = ["index.html", "projects.html", "writing.html"]
 
 
 # --- front matter -----------------------------------------------------------
@@ -212,7 +212,13 @@ class Ctx(dict):
     def path(self, p):
         cur = self
         for part in p.split("."):
-            if isinstance(cur, dict):
+            # Liquid exposes .size / .first / .last on arrays and strings
+            if part in ("size", "first", "last") and isinstance(cur, (list, tuple, str)):
+                if part == "size":
+                    cur = len(cur)
+                else:
+                    cur = cur[0] if (cur and part == "first") else (cur[-1] if cur else None)
+            elif isinstance(cur, dict):
                 cur = cur.get(part)
             else:
                 cur = getattr(cur, part, None)
@@ -279,13 +285,21 @@ def truthy(expr, ctx):
             l, r = expr.split(op, 1)
             return (truthy(l, ctx) or truthy(r, ctx)) if op == " or " \
                 else (truthy(l, ctx) and truthy(r, ctx))
-    for op in (" contains ", " == ", " != "):
+    for op in (" contains ", " == ", " != ", " >= ", " <= ", " > ", " < "):
         if op in expr:
             l, r = expr.split(op, 1)
             a, b = resolve(l, ctx), resolve(r, ctx)
             if op == " contains ":
                 return str(b) in str(a or "")
-            return (str(a) == str(b)) if op == " == " else (str(a) != str(b))
+            if op == " == ":
+                return str(a) == str(b)
+            if op == " != ":
+                return str(a) != str(b)
+            try:
+                a, b = float(a or 0), float(b or 0)
+            except (TypeError, ValueError):
+                return False
+            return {" >= ": a >= b, " <= ": a <= b, " > ": a > b, " < ": a < b}[op]
     return bool(resolve(expr, ctx))
 
 
