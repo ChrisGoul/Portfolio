@@ -4,3 +4,6 @@ _site/
 .sass-cache/
 Gemfile.lock
 preview_serve.log
+.env
+.env.txt
+*.env
