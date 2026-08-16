@@ -1,0 +1,40 @@
+title: Chris Goul
+tagline: Mechanical design engineer
+description: >-
+  Staff mechanical design engineer at 1X Technologies, working on humanoid robot
+  actuation. Write-ups of hardware and machine learning projects.
+
+# This site is served from https://chrisgoul.github.io/Portfolio/, which is a
+# GitHub *project* page — so every internal link has to carry the /Portfolio
+# prefix. Never hardcode a leading "/" in a URL; use the relative_url filter:
+#   <a href="{{ '/projects/foo/' | relative_url }}">
+url: "https://chrisgoul.github.io"
+baseurl: "/Portfolio"
+
+author:
+  name: Chris Goul
+  github: ChrisGoul
+  linkedin: christopher-goul
+  email: chgoul3@gmail.com
+
+# Each project is one document in _projects/. They are a collection rather than
+# blog posts because they have no meaningful publication date — ordering on the
+# home page comes from the `order:` field in each file's front matter.
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope: { path: "", type: projects }
+    values:
+      layout: project
+
+sass:
+  style: compressed
+
+exclude:
+  - README.md
+  - preview.py
+  - _site_preview
+  - .gitattributes
