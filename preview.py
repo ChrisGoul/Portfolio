@@ -22,6 +22,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 import webbrowser
 from datetime import datetime
 
@@ -31,7 +32,11 @@ except ImportError:
     sys.exit("needs PyYAML:  pip install pyyaml")
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(ROOT, "_site_preview")
+# Build OUTSIDE the repo, deliberately. Every build wipes this directory, so
+# anything edited in there is destroyed on the next run. Keeping it next to the
+# source made it far too easy to open the generated page, edit that, and lose
+# the work. Source of truth is _projects/*.md — never the build output.
+OUT = os.path.join(tempfile.gettempdir(), "chrisgoul-portfolio-preview")
 COPY_DIRS = ["assets", "css", "js"]
 PAGES = ["index.html"]
 
@@ -437,6 +442,7 @@ def build(strict=True):
             leaked.append((os.path.relpath(p, OUT), n))
 
     print(f"built {len(written)} pages -> {OUT}")
+    print("   (generated output — edit _projects/*.md, never these files)")
     if leaked:
         print("\n!! unrendered Liquid left in output:")
         for f, n in leaked:

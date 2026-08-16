@@ -1,10 +1,11 @@
 ---
-title: "I did not beat GPT-2"
+title: "Training a 154M Dense LLM on my RTX 3050"
 order: 1
 lede: >-
-  A 154M-parameter model trained from scratch in 46 hours on one RTX 3050. It
-  lands 1.7 points behind GPT-2-small at a tenth the training compute — and I
-  only found that out after fixing three mistakes in how I was measuring it.
+  I wanted to see how useful of an LLM I could train myself. After some
+  architecture optimization, I fit a 154M-parameter model on my consumer GPU,
+  trained for 46 hours. It lands 1.7 points behind GPT-2-small at a tenth the
+  training compute.
 description: >-
   Training a 154M language model from scratch on a single RTX 3050 and
   benchmarking it properly against GPT-2-small.
@@ -13,12 +14,10 @@ meta: ["153.8M params", "0.81B tokens", "46.5 h", "RTX 3050 8 GB"]
 
 ## What I built
 
-A transformer and its whole training harness, written from scratch in PyTorch,
-sized to fit an 8 GB consumer GPU: Muon on the 2D hidden matrices with Adam on
-embeddings and head, RoPE, QK-norm, ReLU² MLPs, zero-init residual projections,
-logit soft-capping, trapezoidal LR. Gradient checkpointing is what makes 154M
-fit at all — activations were the wall, and recomputing them cut memory from
-7.9 GB to 2.8 GB.
+A transformer and training harness in PyTorch, sized to fit an 8 GB consumer
+GPU. Used Muon optimizer, Adam on tied embeddings and head, RoPE, ReLU² MLP,
+trapezoidal LR. Gradient checkpointing is what made this actually fit within my
+8GB memory.
 
 99,000 steps on 0.81B tokens of FineWeb-Edu, Cosmopedia and synthetic
 chain-of-thought at a 16K vocabulary. Final validation loss 3.10. Then a
@@ -55,15 +54,15 @@ supervised fine-tune into a chat model on 107k instruction examples.
 <text class="c-tick" x="379" y="295" text-anchor="middle">training step</text>
 </svg>
 </div>
-<figcaption>Loss on a log axis across all 46.5 hours. Validation tracks training the
-whole way with no divergence — at 0.81B tokens on 154M parameters the model is
-still firmly undertrained, which is the clearest thing the curve says.</figcaption>
+<figcaption>Loss on a log axis across all 46.5 hours. Validation tracks training
+the whole way. At 0.81B tokens on 154M parameters the model is still quite
+undertrained. I did not want to wait another several days, so I figured I would
+run future ablations on a cluster.</figcaption>
 </figure>
 
 ## Result
 
-Measured against GPT-2-small under one shared harness — same code, same items,
-same context budget, paired significance tests:
+Measured against GPT-2-small locally under a shared harness:
 
 <div class="tbl">
 <table>
@@ -77,9 +76,9 @@ same context budget, paired significance tests:
 </table>
 </div>
 
-I lost. But 1.7 points behind on HellaSwag and level on ARC-Easy, at **~12×
-fewer tokens**, **~10× less compute** and about **$2 of electricity** against
-$20 of rented A100 time, is a result I'll take.
+Noticeably worse across most of these benchmarks. But 1.7 points behind on
+HellaSwag and level on ARC-Easy, at **~12× fewer tokens**, **~10× less compute**
+and about **$2 of electricity**.
 
 ## Three things I got wrong
 
