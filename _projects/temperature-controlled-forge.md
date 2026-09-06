@@ -8,12 +8,10 @@ description: A PID-controlled propane forge for the MIT Blacksmithing Lab.
 meta: ["Machine", "Controls", "MIT Blacksmithing Lab"]
 ---
 
-A propane forge normally runs wherever the burner and the day put it, and you
-judge the steel by colour. That is fine for forging and poor for heat treatment,
-where the number matters.
+Propane forges are typically controlled with a manual gas valve, and you
+judge the steel by colour. That's generally fine for forging, but for special alloys and for heat treatment, it's not so useful.
 
-This one closes the loop: measure the chamber, modulate the gas, hold a setpoint.
-Built for the MIT Blacksmithing Lab.
+This propane forge has a thermocouple internally to measure the temperature, and a PID controller opens/closes the gas supply to modulate the temperature. Built for the MIT Blacksmithing Lab.
 
 <figure class="full">
 <img src="{{ '/assets/forge.png' | relative_url }}" alt="PID-controlled propane forge" loading="lazy">
