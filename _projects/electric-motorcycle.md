@@ -2,19 +2,15 @@
 title: Electric Motorcycle
 order: 7
 lede: >-
-  Designed, simulated, welded and built. Learned the importance of wire
-  harnesses.
+  Designed, simulated, welded and built an electric motorcycle.
 description: A from-scratch electric motorcycle — frame design, simulation, fabrication.
 meta: ["Vehicle", "Ground"]
 ---
 
-Frame designed and simulated, then welded up and built out as a running
-motorcycle.
+Used Solidworks to model the frame and run some basic FEA on the structure, then welded it and built up a running motorcycle.
 
-The lesson that stuck was not structural. A frame you can analyse; a wire
-harness you have to plan, and I did not plan this one. Everything electrical
-took longer than everything mechanical, and almost all of that time went into
-problems that a proper harness design would have prevented outright.
+In this case, the electrical side was much more challenging than the mechanical-wiring 
+took much longer than the mechanical assembly, and I learned the importance of a good wire harness.
 
 <figure class="full">
 <img src="{{ '/assets/motorcycle.png' | relative_url }}" alt="Electric motorcycle" loading="lazy">
