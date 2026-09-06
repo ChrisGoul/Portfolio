@@ -1,27 +1,27 @@
 ---
-title: "Training a 154M Dense LLM on my RTX 3050"
+title: "Training a Small Language Model"
 order: 1
 lede: >-
-  I wanted to see how useful of an LLM I could train myself. After some
-  architecture optimization, I fit a 154M-parameter model on my consumer GPU,
-  trained for 46 hours. It lands 1.7 points behind GPT-2-small at a tenth the
-  training compute.
+  I wanted to get a better feel for what it takes to train a language model—how
+  much compute it needs, how long it takes, and how smart a small model can
+  actually feel. I trained one on my RTX 3050 to find out.
 description: >-
   Training a 154M language model from scratch on a single RTX 3050 and
-  benchmarking it properly against GPT-2-small.
+  benchmarking it against GPT-2-small.
 meta: ["153.8M params", "0.81B tokens", "46.5 h", "RTX 3050 8 GB"]
 ---
 
 ## What I built
 
-A transformer and training harness in PyTorch, sized to fit an 8 GB consumer
-GPU. Used Muon optimizer, Adam on tied embeddings and head, RoPE, ReLU² MLP,
-trapezoidal LR. Gradient checkpointing is what made this actually fit within my
-8GB memory.
+I trained a 154M-parameter language model from scratch on an RTX 3050 with 8 GB
+of memory. It took 46.5 hours to get through 0.81B tokens. Gradient checkpointing
+was a must to make it fit.
 
-99,000 steps on 0.81B tokens of FineWeb-Edu, Cosmopedia and synthetic
-chain-of-thought at a 16K vocabulary. Final validation loss 3.10. Then a
-supervised fine-tune into a chat model on 107k instruction examples.
+I used Muon, RoPE, tied embedding weights, and a 16K-token vocabulary, borrowing
+heavily from other small-model training setups and the
+[SmolLM training playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook#training-compass-why--what--how).
+After 99,000 steps my patience ran out, so I stopped pretraining at a validation
+loss of 3.10 and fine-tuned it into a chat model on 107k instruction examples.
 
 <figure class="full">
 <div class="chartbox">
@@ -76,30 +76,22 @@ Measured against GPT-2-small locally under a shared harness:
 </table>
 </div>
 
-Noticeably worse across most of these benchmarks. But 1.7 points behind on
-HellaSwag and level on ARC-Easy, at **~12× fewer tokens**, **~10× less compute**
-and about **$2 of electricity**.
+It was worse than GPT-2-small on most benchmarks, but only 1.7 points behind on
+HellaSwag and roughly level on ARC-Easy, despite using **~12× fewer tokens**,
+**~10× less compute**, and about **$2 of electricity**. Which likely says more
+about how much better the recipes and datasets have become than it does about my
+model.
 
-## Three things I got wrong
-
-My live benchmark said HellaSwag ≈ 40, comfortably above GPT-2's published 31.1.
-Then I noticed my *untrained* model had scored 31.0 on the same harness. Three
-ordinary mistakes, all pushing the same way:
-
-- **n = 100 is noise.** Bootstrapped, a 100-item HellaSwag run on this model
-  returns anywhere from 20 to 38. My whole "learning curve" fit inside one error bar.
-- **`items[:n]` is not a random sample.** The head of HellaSwag's validation split
-  is much easier than the tail: same weights scored **39.0** on the first 100,
-  **35.0** on the first 2,000, **28.3** on all 10,042.
-- **I had written the scoring twice.** Training loop used `enc(ctx) + enc(" " + choice)`,
-  offline script used no leading space. Under BPE those differ by up to 3.6 points,
-  so two columns in my own experiment log were never comparable.
+My first benchmark results looked much better than they really were. I had tested
+too few examples, taken them from the easiest part of the dataset, and used
+slightly different scoring code between runs. Measuring the model reliably
+turned out to be harder than training it.
 
 ## What the model is actually like
 
-Grammar is solved by ~step 20,000; what keeps improving after that is staying on
-topic. Knowledge never arrives — 0.81B tokens doesn't buy facts. After
-fine-tuning, asked to add 17 and 25:
+Grammar is mostly there by ~step 20,000; what keeps improving after that is
+staying on topic. It never learned much factual knowledge—0.81B tokens doesn't
+buy many facts. After fine-tuning, asked to add 17 and 25:
 
 > 17 plus 25 is the number of base wins it is played on. So that means the number
 > of base wins is 25/4 = `<<25/4=5>>`5 base wins.
@@ -111,10 +103,7 @@ examples without learning any reasoning. Format is cheap; knowledge is not.
 ## Takeaways
 
 - Never take the first *n* rows of a benchmark. Shuffle, or use all of it.
-- Put an interval on every number. At n=100 that interval is ±9 points.
-- Score your baseline with your own code — harness-to-harness differences are
-  bigger than the effect you're chasing.
-- Watch the fine-tuning curve before picking a step count. 4,500 of my 6,000 SFT
-  steps bought nothing.
-
-The measurement turned out to be harder than the training.
+- Put an interval on benchmark numbers, especially when using a subset of the full benchmark. At n=100 that interval is ±9 points.
+- Score model performance using my own code—harness-to-harness differences had a huge impact on apparent benchmark performance.
+- Watch the fine-tuning curve before picking a step count. At around 4,500 of my 6,000 SFT
+  steps I stopped seeing clear improvements.
