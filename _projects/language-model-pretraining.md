@@ -1,27 +1,32 @@
 ---
-title: "Training a Small Language Model"
+title: "Training a 154M Dense LLM on my RTX 3050"
 order: 1
 lede: >-
-  I wanted to get a better feel for what it takes to train a language model—how
-  much compute it needs, how long it takes, and how smart a small model can
-  actually feel. I trained one on my RTX 3050 to find out.
+  
+  I wanted to see how useful of an LLM I could train myself. After some architecture optimization, I fit a 154M-parameter model on my consumer GPU, and trained it for 46 hours. It lands near GPT-2 on several pretraining benchmarks.
+  
+  
 description: >-
   Training a 154M language model from scratch on a single RTX 3050 and
-  benchmarking it against GPT-2-small.
+  benchmarking it properly against GPT-2-small.
 meta: ["153.8M params", "0.81B tokens", "46.5 h", "RTX 3050 8 GB"]
 ---
 
 ## What I built
 
-I trained a 154M-parameter language model from scratch on an RTX 3050 with 8 GB
-of memory. It took 46.5 hours to get through 0.81B tokens. Gradient checkpointing
-was a must to make it fit.
+The motivation for this project was simple, I wanted to see how useful of an LLM I could train myself. More specifically though, I was curious to understand:
 
-I used Muon, RoPE, tied embedding weights, and a 16K-token vocabulary, borrowing
-heavily from other small-model training setups and the
-[SmolLM training playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook#training-compass-why--what--how).
-After 99,000 steps my patience ran out, so I stopped pretraining at a validation
-loss of 3.10 and fine-tuned it into a chat model on 107k instruction examples.
+  - What does it take, in terms of data, infrastructure, time, and money, to train an LLM?
+  - At what scale do these models start to feel 'intelligent'?
+
+I started small- my PC has a RTX 3050 GPU, with a measly 8GB of memory. The [SmolLM training playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook#training-compass-why--what--how) was a great reference for training small models that I heavily borrowed ideas from.
+
+For a first pass I wanted to do a shorter training run- and the easier sacrifice is data, if I don't care about being compute 'optimal'. I settled on a 150M model since I could just barely fit it on my GPU with gradient checkpointing.I used Muon, RoPE, tied embedding weights, and a 16K-token vocabulary. I wanted to keep vocab as small as possible, since at these model sizes it takes up a larger poration of the total parameters.
+
+99,000 steps on 0.81B tokens of FineWeb-Edu, Cosmopedia and synthetic
+chain-of-thought at a 16K vocabulary. Final validation loss 3.10. Only got to around ~5 tokens/parameter,
+so not very [optimal](https://arxiv.org/abs/2001.08361)  Then a
+supervised fine-tune on 107k instruction examples.
 
 <figure class="full">
 <div class="chartbox">
@@ -54,10 +59,9 @@ loss of 3.10 and fine-tuned it into a chat model on 107k instruction examples.
 <text class="c-tick" x="379" y="295" text-anchor="middle">training step</text>
 </svg>
 </div>
-<figcaption>Loss on a log axis across all 46.5 hours. Validation tracks training
-the whole way. At 0.81B tokens on 154M parameters the model is still quite
-undertrained. I did not want to wait another several days, so I figured I would
-run future ablations on a cluster.</figcaption>
+<figcaption>Loss on a log axis across all 46.5 hours. A little spiky, but validation loss on the holdout set tracks training the whole way. At 0.81B tokens on 154M parameters the model is still quite
+undertrained. I did not want to wait another several days, so I figured I could
+save the longer training runs as future ablations.</figcaption>
 </figure>
 
 ## Result
@@ -76,34 +80,34 @@ Measured against GPT-2-small locally under a shared harness:
 </table>
 </div>
 
-It was worse than GPT-2-small on most benchmarks, but only 1.7 points behind on
-HellaSwag and roughly level on ARC-Easy, despite using **~12× fewer tokens**,
-**~10× less compute**, and about **$2 of electricity**. Which likely says more
-about how much better the recipes and datasets have become than it does about my
-model.
+Noticeably worse across most of these benchmarks. But 1.7 points behind on
+HellaSwag and level on ARC-Easy, at **~12× fewer tokens** and **~10× less compute**
 
-My first benchmark results looked much better than they really were. I had tested
-too few examples, taken them from the easiest part of the dataset, and used
-slightly different scoring code between runs. Measuring the model reliably
-turned out to be harder than training it.
+
+## Some learnings
+
+My live benchmark during pretraining said HellaSwag ≈ 40, comfortably above GPT-2's published 31.1.
+Then I noticed my *untrained* model had scored 31.0 on the same harness. It turned out:
+
+- Only testing 100 samples from HellaSwag during pretraining on this model
+  returns a score anywhere from 20 to 38. So I was just tracking noise.
+- **`items[:n]` is not a random sample.** I had chosen the first n samples, but the head of HellaSwag's validation split is easier than the tail: same weights scored **39.0** on the first 100,
+  **35.0** on the first 2,000, **28.3** on all 10,042.
 
 ## What the model is actually like
 
-Grammar is mostly there by ~step 20,000; what keeps improving after that is
-staying on topic. It never learned much factual knowledge—0.81B tokens doesn't
-buy many facts. After fine-tuning, asked to add 17 and 25:
+Grammar was pretty coherent by ~step 20,000; after that, it seemed to get better at staying on topic. It never really learned facts, perhaps 0.81B tokens is simply too few.
+
+Results after fine-tuning, when asked to add 17 and 25:
 
 > 17 plus 25 is the number of base wins it is played on. So that means the number
 > of base wins is 25/4 = `<<25/4=5>>`5 base wins.
 
-It reproduced GSM8K's calculator-annotation syntax perfectly while getting the
-arithmetic wrong three ways. It learned the *notation* of reasoning from 107k
-examples without learning any reasoning. Format is cheap; knowledge is not.
+It reproduced GSM8K's answer syntax, but clearly failed to understand the question and the math. I ended up with a model that sorta imitates human speech, but not much else.
 
 ## Takeaways
 
 - Never take the first *n* rows of a benchmark. Shuffle, or use all of it.
-- Put an interval on benchmark numbers, especially when using a subset of the full benchmark. At n=100 that interval is ±9 points.
-- Score model performance using my own code—harness-to-harness differences had a huge impact on apparent benchmark performance.
-- Watch the fine-tuning curve before picking a step count. At around 4,500 of my 6,000 SFT
-  steps I stopped seeing clear improvements.
+- Make sure you have a sufficiently large sample for live benchmarks- so you aren't just tracking noise
+- Score your baseline/other open models with the same harness- harness-to-harness differences made it tough to compare back to published numbers
+- The model felt quite weak, especially for it's weight class. May experiment in the future with longer training runs to show the model more data, and/or more parameters in total
