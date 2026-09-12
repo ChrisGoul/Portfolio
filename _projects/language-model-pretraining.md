@@ -21,12 +21,14 @@ The motivation for this project was simple, I wanted to see how useful of an LLM
 
 I started small- my PC has a RTX 3050 GPU, with a measly 8GB of memory. The [SmolLM training playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook#training-compass-why--what--how) was a great reference for training small models that I heavily borrowed ideas from.
 
-For a first pass I wanted to do a shorter training run- and the easier sacrifice is data, if I don't care about being compute 'optimal'. I settled on a 150M model since I could just barely fit it on my GPU with gradient checkpointing.I used Muon, RoPE, tied embedding weights, and a 16K-token vocabulary. I wanted to keep vocab as small as possible, since at these model sizes it takes up a larger poration of the total parameters.
+For a first pass I wanted to do a short training run. I settled on a 150M model since I could just barely fit it on my GPU with gradient checkpointing. I used Muon, RoPE, tied embedding weights, and a 16K-token vocabulary. I wanted to keep vocab as small as possible, since at these model sizes it takes up a larger portion of the total parameters- 16k = 12M parameters. That may have been an incorrect choice, since my already undertrained model (only 0.8B tokens) effectively sees even fewer, since the corpus grows.
 
-99,000 steps on 0.81B tokens of FineWeb-Edu, Cosmopedia and synthetic
-chain-of-thought at a 16K vocabulary. Final validation loss 3.10. Only got to around ~5 tokens/parameter,
-so not very [optimal](https://arxiv.org/abs/2001.08361)  Then a
-supervised fine-tune on 107k instruction examples.
+My model trained for 99,000 steps on 0.81B tokens of FineWeb-Edu, Cosmopedia and synthetic
+chain-of-thought. Final validation loss was 3.10- because I chose to end my run early, I only got to around ~5 tokens/parameter,
+so not very [optimal](https://arxiv.org/abs/2001.08361) per the scaling laws paper. Then a quick
+supervised fine-tune on 107k instruction examples. 
+
+One interesting note is that competitive small models lately (Llama, Qwen, SmolLM2) train on vastly more tokens/parameter. SmolLM2-125M actually goes to a staggering 2T tokens on their 135M parameter model- over 2000x the amount of data I fed mine. It makes sense to pour resources into training small models- they are cheap to train, and cheap to run during inference. But for my setup such scales were simply not practical.
 
 <figure class="full">
 <div class="chartbox">
@@ -59,55 +61,160 @@ supervised fine-tune on 107k instruction examples.
 <text class="c-tick" x="379" y="295" text-anchor="middle">training step</text>
 </svg>
 </div>
-<figcaption>Loss on a log axis across all 46.5 hours. A little spiky, but validation loss on the holdout set tracks training the whole way. At 0.81B tokens on 154M parameters the model is still quite
-undertrained. I did not want to wait another several days, so I figured I could
-save the longer training runs as future ablations.</figcaption>
+<figcaption>Loss on a log axis across all 46.5 hours. A little spiky, but validation loss on the holdout set tracks training the whole way.</figcaption>
 </figure>
 
-## Result
+## Results
 
-Measured against GPT-2-small locally under a shared harness:
+For base models, the fairest comparison is cloze-style likelihood. You score each
+candidate continuation, normalize by length, and pick the most
+likely answer. I used HuggingFace's LightEval to evaluate my 154M checkpoint, GPT-2-small, and SmolLM2-135M with
+their latest cloze-format setup. I chose to rerun all of these models' benchmarks to ensure the comparison is accurate, as opposed to relying on published numbers.
+
+<figure class="full">
+<div class="chartbox">
+<svg viewBox="0 0 820 500" role="img" aria-label="Cloze benchmark bars comparing the 154M model, GPT-2-small, and SmolLM2-135M">
+<line class="c-grid" x1="78" y1="366.0" x2="790" y2="366.0"/>
+<text class="c-tick" x="66" y="370.0" text-anchor="end">0</text>
+<line class="c-grid" x1="78" y1="306.0" x2="790" y2="306.0"/>
+<text class="c-tick" x="66" y="310.0" text-anchor="end">15</text>
+<line class="c-grid" x1="78" y1="246.0" x2="790" y2="246.0"/>
+<text class="c-tick" x="66" y="250.0" text-anchor="end">30</text>
+<line class="c-grid" x1="78" y1="186.0" x2="790" y2="186.0"/>
+<text class="c-tick" x="66" y="190.0" text-anchor="end">45</text>
+<line class="c-grid" x1="78" y1="126.0" x2="790" y2="126.0"/>
+<text class="c-tick" x="66" y="130.0" text-anchor="end">60</text>
+<line class="c-grid" x1="78" y1="66.0" x2="790" y2="66.0"/>
+<text class="c-tick" x="66" y="70.0" text-anchor="end">75</text>
+<rect x="113.0" y="121.8" width="16" height="244.2" fill="var(--ink-soft)" opacity="0.55"/>
+<text class="c-lab" x="121.0" y="116.8" text-anchor="middle">61.0</text>
+<rect x="141.0" y="116.2" width="16" height="249.8" fill="var(--mark)" opacity="0.75"/>
+<text class="c-lab" x="149.0" y="111.2" text-anchor="middle">62.5</text>
+<rect x="169.0" y="94.8" width="16" height="271.2" fill="#2f7d5c" opacity="0.9"/>
+<text class="c-lab" x="177.0" y="89.8" text-anchor="middle">67.8</text>
+<text class="c-tick" x="142.0" y="392" text-anchor="middle">PIQA</text>
+<rect x="219.0" y="255.7" width="16" height="110.3" fill="var(--ink-soft)" opacity="0.55"/>
+<text class="c-lab" x="227.0" y="250.7" text-anchor="middle">27.6</text>
+<rect x="247.0" y="247.7" width="16" height="118.3" fill="var(--mark)" opacity="0.75"/>
+<text class="c-lab" x="255.0" y="242.7" text-anchor="middle">29.6</text>
+<rect x="275.0" y="201.2" width="16" height="164.8" fill="#2f7d5c" opacity="0.9"/>
+<text class="c-lab" x="283.0" y="196.2" text-anchor="middle">41.2</text>
+<text class="c-tick" x="248.0" y="392" text-anchor="middle">HellaSwag</text>
+<rect x="325.0" y="246.3" width="16" height="119.7" fill="var(--ink-soft)" opacity="0.55"/>
+<text class="c-lab" x="333.0" y="241.3" text-anchor="middle">29.9</text>
+<rect x="353.0" y="244.4" width="16" height="121.6" fill="var(--mark)" opacity="0.75"/>
+<text class="c-lab" x="361.0" y="239.4" text-anchor="middle">30.4</text>
+<rect x="381.0" y="186.3" width="16" height="179.7" fill="#2f7d5c" opacity="0.9"/>
+<text class="c-lab" x="389.0" y="181.3" text-anchor="middle">44.9</text>
+<text class="c-tick" x="354.0" y="392" text-anchor="middle">ARC avg.</text>
+<rect x="431.0" y="269.7" width="16" height="96.3" fill="var(--ink-soft)" opacity="0.55"/>
+<text class="c-lab" x="439.0" y="264.7" text-anchor="middle">24.1</text>
+<rect x="459.0" y="249.4" width="16" height="116.6" fill="var(--mark)" opacity="0.75"/>
+<text class="c-lab" x="467.0" y="244.4" text-anchor="middle">29.2</text>
+<rect x="487.0" y="227.4" width="16" height="138.6" fill="#2f7d5c" opacity="0.9"/>
+<text class="c-lab" x="495.0" y="222.4" text-anchor="middle">34.6</text>
+<text class="c-tick" x="460.0" y="392" text-anchor="middle">CSQA</text>
+<rect x="537.0" y="162.0" width="16" height="204.0" fill="var(--ink-soft)" opacity="0.55"/>
+<text class="c-lab" x="545.0" y="157.0" text-anchor="middle">51.0</text>
+<rect x="565.0" y="163.3" width="16" height="202.7" fill="var(--mark)" opacity="0.75"/>
+<text class="c-lab" x="573.0" y="158.3" text-anchor="middle">50.7</text>
+<rect x="593.0" y="155.7" width="16" height="210.3" fill="#2f7d5c" opacity="0.9"/>
+<text class="c-lab" x="601.0" y="150.7" text-anchor="middle">52.6</text>
+<text class="c-tick" x="566.0" y="392" text-anchor="middle">Winogrande</text>
+<rect x="643.0" y="250.0" width="16" height="116.0" fill="var(--ink-soft)" opacity="0.55"/>
+<text class="c-lab" x="651.0" y="245.0" text-anchor="middle">29.0</text>
+<rect x="671.0" y="258.8" width="16" height="107.2" fill="var(--mark)" opacity="0.75"/>
+<text class="c-lab" x="679.0" y="253.8" text-anchor="middle">26.8</text>
+<rect x="699.0" y="238.8" width="16" height="127.2" fill="#2f7d5c" opacity="0.9"/>
+<text class="c-lab" x="707.0" y="233.8" text-anchor="middle">31.8</text>
+<text class="c-tick" x="672.0" y="392" text-anchor="middle">OpenBookQA</text>
+<line class="c-axis" x1="78" y1="366" x2="790" y2="366"/>
+<line class="c-axis" x1="78" y1="36" x2="78" y2="366"/>
+<rect x="105" y="410" width="12" height="12" fill="var(--ink-soft)" opacity="0.55"/>
+<text class="c-tick" x="123" y="420">154M</text>
+<rect x="275" y="410" width="12" height="12" fill="var(--mark)" opacity="0.75"/>
+<text class="c-tick" x="293" y="420">GPT-2-small</text>
+<rect x="475" y="410" width="12" height="12" fill="#2f7d5c" opacity="0.9"/>
+<text class="c-tick" x="493" y="420">SmolLM2-135M</text>
+</svg>
+</div>
+<figcaption>All bars are local latest-LightEval cloze-format evals, plotted as
+length-normalized multiple-choice accuracy.</figcaption>
+</figure>
 
 <div class="tbl">
 <table>
-<thead><tr><th>benchmark</th><th class="n">mine</th><th class="n">GPT-2-small</th><th class="n">Δ</th></tr></thead>
+<thead><tr><th>benchmark</th><th class="n">154M</th><th class="n">GPT-2-small</th><th class="n">SmolLM2-135M</th></tr></thead>
 <tbody>
-<tr><td>HellaSwag (10,042)</td><td class="n">28.30</td><td class="n">30.01</td><td class="n bad">−1.71</td></tr>
-<tr><td>ARC-Easy (2,000)</td><td class="n">39.10</td><td class="n">39.80</td><td class="n dim">tie</td></tr>
-<tr><td>PIQA (1,838)</td><td class="n">59.74</td><td class="n">62.24</td><td class="n bad">−2.50</td></tr>
-<tr><td>WikiText-2 (bits/byte)</td><td class="n">1.374</td><td class="n">1.133</td><td class="n bad">worse</td></tr>
+<tr><td>PIQA (1,838)</td><td class="n">61.04</td><td class="n">62.46</td><td class="n good">67.79</td></tr>
+<tr><td>HellaSwag (10,042)</td><td class="n">27.57</td><td class="n">29.58</td><td class="n good">41.21</td></tr>
+<tr><td>ARC-Easy (2,376)</td><td class="n">36.20</td><td class="n">38.01</td><td class="n good">59.47</td></tr>
+<tr><td>ARC-Challenge (1,172)</td><td class="n">23.63</td><td class="n">22.78</td><td class="n good">30.38</td></tr>
+<tr><td>CommonsenseQA (1,221)</td><td class="n">24.08</td><td class="n">29.16</td><td class="n good">34.64</td></tr>
+<tr><td>Winogrande (1,267)</td><td class="n">50.99</td><td class="n">50.67</td><td class="n good">52.57</td></tr>
+<tr><td>OpenBookQA (500)</td><td class="n">29.00</td><td class="n">26.80</td><td class="n good">31.80</td></tr>
 </tbody>
 </table>
 </div>
 
-Noticeably worse across most of these benchmarks. But 1.7 points behind on
-HellaSwag and level on ARC-Easy, at **~12× fewer tokens** and **~10× less compute**
-
+Across these benchmarks, my model is reasonably close to GPT 2-Small, but lags behind SmolLM2 135M. Since I followed a similar data mix and recipe to SmolLM2, excepting the amount of training data.  Perhaps these differences are attributable to my model seeing less data. I plan to investigate this in a further ablation.
 
 ## Some learnings
 
-My live benchmark during pretraining said HellaSwag ≈ 40, comfortably above GPT-2's published 31.1.
-Then I noticed my *untrained* model had scored 31.0 on the same harness. It turned out:
+My live benchmark during pretraining were quite useless- they reported HellaSwag ~ 40, comfortably above GPT-2's published 31.1. It turns out this was mostly noise, since I had been: 
 
-- Only testing 100 samples from HellaSwag during pretraining on this model
-  returns a score anywhere from 20 to 38. So I was just tracking noise.
-- **`items[:n]` is not a random sample.** I had chosen the first n samples, but the head of HellaSwag's validation split is easier than the tail: same weights scored **39.0** on the first 100,
-  **35.0** on the first 2,000, **28.3** on all 10,042.
+- Only testing 100 samples from HellaSwag to speed training, vs. the whole ~10k
+- using **`items[:n]` ** and taking the first 100 samples. Since the head of HellaSwag's validation split is easier than the tail, I later confirmed that the same model scored **39.0** on the first 100,
+  **35.0** on the first 2,000, and **27.6** on all 10,042 in the full test suite.
 
 ## What the model is actually like
 
-Grammar was pretty coherent by ~step 20,000; after that, it seemed to get better at staying on topic. It never really learned facts, perhaps 0.81B tokens is simply too few.
+Anecdotally, grammar was pretty coherent by ~step 20,000; after that, it seemed to get a little better at staying on topic. It never really learned facts, so perhaps 0.81B tokens is simply too few to be useful...  
 
 Results after fine-tuning, when asked to add 17 and 25:
 
 > 17 plus 25 is the number of base wins it is played on. So that means the number
 > of base wins is 25/4 = `<<25/4=5>>`5 base wins.
 
-It reproduced GSM8K's answer syntax, but clearly failed to understand the question and the math. I ended up with a model that sorta imitates human speech, but not much else.
+For comparison, I asked GPT-2-small and SmolLM2-135M-Instruct the same question
+with greedy decoding:
+
+<div class="samples">
+  <div class="s user"><div class="k">prompt</div><div class="v">What is 17 plus 25?</div></div>
+  <div class="s"><div class="k">GPT-2-small</div><div class="v">17 plus 25 is the number of years that a person has been in the United States. 17 plus 25 is the number of years that a person has been in the United States. 17 plus 25 is the number of years that a person has been in the United States.</div></div>
+  <div class="s"><div class="k">SmolLM2-135M-Instruct</div><div class="v">17 plus 25 is 42.</div></div>
+</div>
+
+My model reproduced GSM8K's answer syntax, but clearly failed to understand the
+question and the math. GPT-2-small was fluent but just kept completing the
+phrase. SmolLM2-135M-Instruct was more interesting: same rough
+parameter count, but enough training and post-training to answer correctly.
+
+I also tried a tiny relational reasoning prompt, and an easy
+chat prompt. These are not benchmarks, just quick "what does it feel like?"
+probes:
+
+<div class="samples">
+  <div class="s user"><div class="k">prompt</div><div class="v">Alice is older than Bob. Bob is older than Carla. Who is the youngest? Answer in one sentence.</div></div>
+  <div class="s"><div class="k">154M SFT</div><div class="v">Alice is older than Carla. Bob was over the age of 80 and had a younger sibling with him, so he must have been in his late thirties!</div></div>
+  <div class="s"><div class="k">GPT-2-small</div><div class="v">Answer in one sentence. Answer in one sentence. Answer in one sentence. Answer in one sentence. Answer in one sentence...</div></div>
+  <div class="s"><div class="k">SmolLM2-135M-Instruct</div><div class="v">Alice is the youngest.</div></div>
+</div>
+
+<div class="samples">
+  <div class="s user"><div class="k">prompt</div><div class="v">Tell me a joke.</div></div>
+  <div class="s"><div class="k">154M SFT</div><div class="v">What happened?</div></div>
+  <div class="s"><div class="k">GPT-2-small</div><div class="v">I'm not going to tell you a joke. I'm not going to tell you a joke. I'm not going to tell you a joke...</div></div>
+  <div class="s"><div class="k">SmolLM2-135M-Instruct</div><div class="v">A: "What's the best joke ever?"</div></div>
+</div>
+
+General takeaway is that my model learned
+chat formatting and a little local coherence, but fails even simple symbolic reasoning, math,
+and is not useful as a chat model.
 
 ## Takeaways
 
-- Never take the first *n* rows of a benchmark. Shuffle, or use all of it.
+- Don't take the first *n* rows of a benchmark. Shuffle, or use all of it.
 - Make sure you have a sufficiently large sample for live benchmarks- so you aren't just tracking noise
 - Score your baseline/other open models with the same harness- harness-to-harness differences made it tough to compare back to published numbers
-- The model felt quite weak, especially for it's weight class. May experiment in the future with longer training runs to show the model more data, and/or more parameters in total
+- My model felt quite weak, especially for it's weight class. May experiment in the future with longer training runs to show the model more data
